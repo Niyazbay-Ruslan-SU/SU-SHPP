@@ -1,0 +1,136 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+// Подсистема: Телевизор (TV)
+public class TV
+{
+    public void On() => Console.WriteLine("Телевизор включен.");
+    public void Off() => Console.WriteLine("Телевизор выключен.");
+    public void SetChannel(int channel) => Console.WriteLine($"Канал телевизора установлен на {channel}.");
+}
+
+// Подсистема: Аудиосистема (AudioSystem)
+public class AudioSystem
+{
+    public void On() => Console.WriteLine("Аудиосистема включена.");
+    public void Off() => Console.WriteLine("Аудиосистема выключена.");
+    public void SetVolume(int volume) => Console.WriteLine($"Громкость аудиосистемы установлена на {volume}.");
+}
+
+// Подсистема: DVD-проигрыватель (DVDPlayer)
+public class DVDPlayer
+{
+    public void Play() => Console.WriteLine("DVD воспроизводится.");
+    public void Pause() => Console.WriteLine("DVD на паузе.");
+    public void Stop() => Console.WriteLine("DVD остановлен.");
+}
+
+// Подсистема: Игровая консоль (GameConsole)
+public class GameConsole
+{
+    public void On() => Console.WriteLine("Игровая консоль включена.");
+    public void StartGame() => Console.WriteLine("Игра на консоли запущена.");
+}
+
+// Фасад: Домашний кинотеатр (HomeTheaterFacade)
+public class HomeTheaterFacade
+{
+    private readonly TV _tv;
+    private readonly AudioSystem _audioSystem;
+    private readonly DVDPlayer _dvdPlayer;
+    private readonly GameConsole _gameConsole;
+
+    public HomeTheaterFacade(TV tv, AudioSystem audioSystem, DVDPlayer dvdPlayer, GameConsole gameConsole)
+    {
+        _tv = tv;
+        _audioSystem = audioSystem;
+        _dvdPlayer = dvdPlayer;
+        _gameConsole = gameConsole;
+    }
+
+    // Метод для настройки системы и начала просмотра фильма
+    public void WatchMovie()
+    {
+        Console.WriteLine("Настройка системы для просмотра фильма...");
+        _tv.On();
+        _audioSystem.On();
+        _dvdPlayer.Play();
+        Console.WriteLine("Фильм готов к просмотру!");
+    }
+
+    // Метод для остановки фильма и выключения системы
+    public void StopMovie()
+    {
+        Console.WriteLine("Остановка фильма...");
+        _dvdPlayer.Stop();
+        _tv.Off();
+        _audioSystem.Off();
+        Console.WriteLine("Фильм завершён.");
+    }
+
+    // Метод для настройки системы и начала игры
+    public void PlayGame()
+    {
+        Console.WriteLine("Настройка системы для игры...");
+        _tv.On();
+        _audioSystem.On();
+        _gameConsole.On();
+        _gameConsole.StartGame();
+        Console.WriteLine("Игра запущена!");
+    }
+
+    // Метод для остановки игры и выключения системы
+    public void StopGame()
+    {
+        Console.WriteLine("Остановка игры...");
+        _tv.Off();
+        _audioSystem.Off();
+        Console.WriteLine("Игра завершена.");
+    }
+
+    // Метод для настройки системы для прослушивания музыки
+    public void ListenToMusic()
+    {
+        Console.WriteLine("Настройка системы для прослушивания музыки...");
+        _tv.On();
+        _audioSystem.On();
+        _audioSystem.SetVolume(20); // Установка громкости по умолчанию
+        Console.WriteLine("Музыка готова к воспроизведению.");
+    }
+
+    // Метод для изменения громкости через фасад
+    public void SetVolume(int volume)
+    {
+        _audioSystem.SetVolume(volume);
+        Console.WriteLine($"Громкость установлена на {volume} через фасад.");
+    }
+}
+
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        // Инициализация подсистем
+        var tv = new TV();
+        var audioSystem = new AudioSystem();
+        var dvdPlayer = new DVDPlayer();
+        var gameConsole = new GameConsole();
+
+        // Создание фасада
+        var homeTheater = new HomeTheaterFacade(tv, audioSystem, dvdPlayer, gameConsole);
+
+        // Использование фасада для различных сценариев
+        homeTheater.WatchMovie();
+        homeTheater.SetVolume(15);
+        homeTheater.StopMovie();
+
+        homeTheater.PlayGame();
+        homeTheater.SetVolume(10);
+        homeTheater.StopGame();
+
+        homeTheater.ListenToMusic();
+    }
+}
